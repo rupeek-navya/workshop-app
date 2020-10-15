@@ -48,10 +48,36 @@
     justify-content: space-between;
 }
 .col{
-    flex-basis: 30%;
+    flex-basis: 100%;
     display: flex;
     flex-direction: row;
     /* justify-content: space-between; */
     align-items: stretch;
+}
+@media all and (min-width:680px){
+    .col{
+    flex-basis:47.5%;
+    }
+}
+@media all and (min-width:900px){
+    .col{
+    flex-basis:30%;
+    }
+}
+
+
+.message{
+    border-width: 1px;
+    border-style: solid;
+    padding: 1em 2em;
+    border-radius: 4px;
+}
+.message-info{
+    border-color: navy;
+    background-color: lightblue;
+}
+.message-error{
+    border-color: crimson;
+    background-color: lightpink;
 }
 
