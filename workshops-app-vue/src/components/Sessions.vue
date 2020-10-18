@@ -5,9 +5,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-1">
-                            <button @click="upvote(session.id,session.name,index)">
-                                <i class="fas fa-caret-up"></i>
-                            </button>
+                            <i class="fas fa-caret-up" style="font-size:2em" @click="upvote(session.id,session.name,index)"></i>  
                         </div>
                         <div class="col">
                             {{session.name}}
@@ -23,9 +21,7 @@
                     </div>
                     <div class="row">
                         <div class="col-1">
-                            <button @click="downvote(session.id,session.name,index)">
-                            <i class="fas fa-sort-down"></i>
-                        </button>
+                            <i class="fas fa-sort-down" style="font-size:2em" @click="downvote(session.id,session.name,index)"></i>
                         </div>
                         <div class="col">
                             <div class="badge badge-success" v-if="session.level==='basic' || session.level==='Basic'" >{{session.level}}</div>
