@@ -41,7 +41,7 @@
 
         <div class="row" v-if="status === 'LOADED'">
             <div class="col-4 d-flex" v-for="workshop in workshops" :key="workshop.id">
-                <a href="#" class="text-reset text-decoration-none w-100 my-3 d-flex flex-column">
+                <router-link :to="{ name: 'workshop-details', params: { id: workshop.id } }" class="text-reset text-decoration-none w-100 my-3 d-flex flex-column">
                     <div class="card">
                         <div class="card-body">
                             <div class="card-img-container d-flex flex-column justify-content-center">
@@ -50,7 +50,8 @@
                             <h4 class="card-title">{{workshop.name}}</h4>
                             <div class="card-text">
                                 <div>
-                                    {{workshop.startDate}} - {{workshop.endDate}}
+                                    <span v-html="modifyDateFormat(workshop.startDate)"></span> - 
+                                    <span v-html="modifyDateFormat(workshop.endDate)"></span>
                                 </div>
                                 <div>
                                     <span>{{workshop.time}}</span>
@@ -59,31 +60,33 @@
                             </div>
                         </div>
                     </div>
-                </a>
+                </router-link>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { fetchWorkshops } from '../services/workshops';
-
+import { fetchWorkshops} from '../services/workshops';
 const LOADING = 'LOADING', LOADED = 'LOADED', ERROR_LOADING = 'ERROR_LOADING';
-
 export default {
     name: 'WorkshopsList',
-    data(){
-        return{
-            status:LOADING,
-            showDetails: true,
-        }
+    data() {
+        return {
+            status: LOADING,
+            showDetails: true
+        };
     },
     methods: {
         toggleDetails() {
             this.showDetails = !this.showDetails;
+        },
+        modifyDateFormat(isoDate){
+            const date = new Date( isoDate );
+            return date.toDateString();
         }
     },
-    mounted(){
+    mounted() {
         fetchWorkshops()
             .then( workshops => {
                 this.status = LOADED;

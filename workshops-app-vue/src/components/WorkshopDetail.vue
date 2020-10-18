@@ -13,7 +13,7 @@
             </div>
         </div>
             
-        <div class="row" v-if="status === 'ERROR'">
+        <div class="row" v-if="status === 'ERROR_LOADING'">
             <div class="col-12">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -41,7 +41,8 @@
                                 <div class="col-3">
                                     <p>
                                         <small>
-                                            {{workshop.startDate}} - {{workshop.endDate}}
+                                            <span v-html="modifyDateFormat(workshop.startDate)"></span> - 
+                                            <span v-html="modifyDateFormat(workshop.endDate)"></span>
                                         </small>
                                     </p>
                                     <p>
@@ -52,11 +53,11 @@
                                 </div>
                                 <div class="col-3">
                                     <p> 
-                                        <i :class="workshop.modes.online ? 'fa-check' : 'fa-times'" />
+                                        <i :class="workshop.modes.online ? 'fa fa-check' : 'fa fa-times'" />
                                         <small>Online</small>
                                     </p>
                                     <p>
-                                        <i :class="workshop.modes.inPerson ? 'fa-check' : 'fa-times'" />
+                                        <i :class="workshop.modes.inPerson ? 'fa fa-check' : 'fa fa-times'" />
                                         <small>In person</small>
                                     </p>
                                 </div>
@@ -67,37 +68,49 @@
                         </div>
                     </div>
                 </div>
+                <h3>Sessions in this workshop</h3>
+                <hr/>
+                <sessions
+                    v-bind:workshopId="workshop.id"
+                >
+                </sessions>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-// import Alert from './utils/Alert';
-import { fetchWorkshopsDetail } from '../services/workshop-detail';
 
-const LOADING = 'LOADING', LOADED = 'LOADED', ERROR = 'ERROR';
+import { fetchWorkshopById } from '../services/workshop-detail';
+import Sessions from './Sessions'
 
+const LOADING = 'LOADING', LOADED = 'LOADED', ERROR_LOADING = 'ERROR_LOADING';
 export default {
-    name: 'WorkshopsDetail',
-    data(){
-        return{
-            status:LOADING
-        }
+    name: 'WorkshopDetails',
+    components:{
+        Sessions
     },
-    mounted(){
-        fetchWorkshopsDetail(this.$route.params.id)
+    data() {
+        return {
+            status: LOADING,
+        };
+    },
+    methods: {
+        modifyDateFormat(isoDate){
+            const date = new Date( isoDate );
+            return date.toDateString()
+        },
+    },
+    mounted() {
+        fetchWorkshopById( this.$route.params.id )
             .then( workshop => {
                 this.status = LOADED;
                 this.workshop = workshop;
             })
             .catch( error => {
-                this.status = ERROR
+                this.status = ERROR_LOADING
                 this.error = error;
             });
     }
 }
 </script>
-<style scoped>
-
-</style>
